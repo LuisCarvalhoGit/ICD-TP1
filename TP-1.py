@@ -52,10 +52,86 @@ def weekly_study_hours(pais, dispositivo):
 grade, study_hours = weekly_study_hours("USA", "Tablet")
 print(f"highest grade: {grade}  study hours (weekly): {study_hours}")
 
+# Exercicio 5
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+import numpy as np
+
+X_reg = df[['video_watch_time_min']]
+y_reg = df['final_grade']
+
+modelo_regressao = LinearRegression()
+modelo_regressao.fit(X_reg, y_reg)
 
 
+y_pred_reg = modelo_regressao.predict(X_reg)
+
+mse = mean_squared_error(y_reg, y_pred_reg)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_reg, y_pred_reg)
+
+print("\n--- Análise de Erros (Exercício 5) ---")
+print(f"Erro Quadrático Médio (MSE): {mse:.2f}")
+print(f"Raiz do Erro Quadrático Médio (RMSE): {rmse:.2f}")
+print(f"Coeficiente de Determinação (R²): {r2:.4f}")
+
+# Criar o Gráfico de Dispersão (Scatter Plot) com a reta de regressão 
+plt.figure(figsize=(10, 6))
+plt.scatter(X_reg, y_reg, alpha=0.5, color='teal', label='Dados Observados')
+plt.plot(X_reg, y_pred_reg, color='red', linewidth=2, label=f'Reta de Regressão ($R^2$ = {r2:.2f})')
+
+plt.title('Relação entre Tempo de Visualização de Vídeos e Nota Final')
+plt.xlabel('Minutos de Observação de Vídeos (video_watch_time_min)')
+plt.ylabel('Nota Final (final_grade)')
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.4)
+plt.show()
 
 
+# Exercicio 6
+from sklearn.model_selection import train_test_split
+
+features = ['device_type', 'study_hours_weekly', 'forum_posts']
+X = df[features]
+y = df['final_grade']
+
+# device_type é uma variavel de texto
+# É preciso numeros para o ML, por isso usar One-Hot Encoding
+# O parâmetro drop_first=True evita o problema de multicolinearidade (Dummy Variable Trap).
+X_encoded = pd.get_dummies(X, columns=['device_type'], drop_first=True)
+
+# Dividir dataset em 80% Treino e 20% Teste
+X_train, X_test, y_train, y_test = train_test_split(X_encoded, y, test_size=0.2, random_state=42)
+
+# Treinar modelo
+# Using Multiple Linear Regression (bom para prever valores contínuos de forma interpretável)
+modelo_ml = LinearRegression()
+modelo_ml.fit(X_train, y_train)
+
+# Fazer previsoes
+y_pred = modelo_ml.predict(X_test)
+
+# Avaliar performance
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, y_pred)
+
+print("\n--- Resultados Machine Learning (Exercício 6) ---")
+print(f"Erro Quadrático Médio (MSE): {mse:.2f}")
+print(f"Raiz do Erro Quadrático Médio (RMSE): {rmse:.2f}")
+print(f"Coeficiente de Determinação (R²): {r2:.4f}")
+
+# Visualização de Resultados 
+# Comparar graficamente os valores reais vs previsões
+plt.figure(figsize=(8, 8))
+plt.scatter(y_test, y_pred, alpha=0.6, color='purple')
+plt.plot([y.min(), y.max()], [y.min(), y.max()], 'k--', lw=2, label='Previsão Perfeita')
+plt.xlabel('Nota Final Real')
+plt.ylabel('Nota Final Prevista')
+plt.title('Regressão Linear Múltipla: Valores Reais vs Previstos')
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.5)
+plt.show()
 
 
 
