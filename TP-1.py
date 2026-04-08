@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Apr  7 14:06:03 2026
 
-@author: nogue
-"""
-
-import pandas as pd
 
 # Exercicio - 1
+import pandas as pd
+
 df = pd.read_csv("online_learning_engagement_dataset.csv")
 
 paises_alvo = ["Canada", "India", "USA"]
@@ -25,7 +21,7 @@ medias = df_filtered.groupby('country')[['video_watch_time_min', 'assignments_su
 medias.plot(kind='bar', 
             subplots=True, 
             figsize=(10, 8), 
-            color=['#1f77b4', '#ff7f0e'], # Cores profissionais
+            color=['#1f77b4', '#ff7f0e'], 
             title=['Tempo Médio de Visualização (min)', 'Média de Tarefas Submetidas'],
             legend=False) # Removemos a legenda pois o título já explica
 
@@ -142,21 +138,14 @@ plt.grid(True, linestyle='--', alpha=0.5)
 plt.show()
 
 
+# Teste Extra: Random Forest
+from sklearn.ensemble import RandomForestRegressor
 
+# Usamos os mesmos dados de treino e teste do Exercício 6
+modelo_rf = RandomForestRegressor(n_estimators=100, random_state=42)
+modelo_rf.fit(X_train, y_train)
 
+y_pred_rf = modelo_rf.predict(X_test)
+r2_rf = r2_score(y_test, y_pred_rf)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+print(f"R² com Random Forest: {r2_rf:.4f}")
