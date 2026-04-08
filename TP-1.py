@@ -18,11 +18,19 @@ df_filtered.to_csv("filtered_df.csv")
 # Exercicio 2
 import matplotlib.pyplot as plt
 
+# Agrupar os dados
 medias = df_filtered.groupby('country')[['video_watch_time_min', 'assignments_submitted']].mean()
 
-medias.plot(kind='bar', figsize=(10, 6))
-plt.title('Média de Engajamento por País')
-plt.ylabel('Valor Médio')
+# Criar o gráfico com subplots=True para separar as escalas
+medias.plot(kind='bar', 
+            subplots=True, 
+            figsize=(10, 8), 
+            color=['#1f77b4', '#ff7f0e'], # Cores profissionais
+            title=['Tempo Médio de Visualização (min)', 'Média de Tarefas Submetidas'],
+            legend=False) # Removemos a legenda pois o título já explica
+
+plt.xlabel('País')
+plt.tight_layout() # Garante que os gráficos não ficam sobrepostos
 plt.show()
 
 # Exercicio 3
@@ -132,7 +140,6 @@ plt.title('Regressão Linear Múltipla: Valores Reais vs Previstos')
 plt.legend()
 plt.grid(True, linestyle='--', alpha=0.5)
 plt.show()
-
 
 
 
